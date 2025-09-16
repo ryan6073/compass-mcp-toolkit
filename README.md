@@ -5,6 +5,7 @@
 它目前包含两个独立的服务：
 1.  **指标模型数据服务**: 提供高阶的分析模型数据，例如贡献者画像、项目活跃度、社区健康度等。
 2.  **丰富化数据服务**: 提供更细粒度的原始事件数据，例如 Fork、Commit、Issue、PR 等详细信息。
+3.  **Python 绘图服务**: 执行 Matplotlib 绘图代码，生成图片并返回可公开访问的 URL。
 
 ## ✨ 核心服务
 
@@ -35,6 +36,11 @@
 -   `get_releases_enriched_data`: 获取版本发布的详细数据。
 -   `get_github_event_data`: 获取原始的 GitHub Event 数据。
 -   `get_github_repo_event_data`: 获取仓库级别的 Event 聚合数据。
+
+### 3. Python 绘图服务 (`python_plot_service.py`)
+此服务运行在 `http://0.0.0.0:8004`，提供一个通用的绘图工具：
+
+-   `generate_plot_from_python`: 安全地执行一段 Python 绘图代码（使用 Matplotlib），将生成的图片上传至图床，并返回图片的 URL。
 
 ## 🚀 快速开始
 
@@ -80,7 +86,13 @@
 
 2.  编辑 `.env` 文件，填入以下内容:
     ```env
+    # Gitee Compass 服务所需的 Token
+    # 请前往 [https://oss-compass.org/dataHub#introduction](https://oss-compass.org/dataHub#introduction) 申请
     GITEE_ACCESS_TOKEN="your_gitee_access_token_here"
+
+    # Python 绘图服务所需的 ImgBB API Key
+    # 请前往 [https://api.imgbb.com/](https://api.imgbb.com/) 注册并获取
+    IMGBB_API_KEY="your_imgbb_api_key_here"
     ```
     请将 `your_gitee_access_token_here` 替换为你自己的有效 Token。
 
@@ -100,4 +112,10 @@ python enriched_data_server.py
 ```
 > ✅ 服务成功启动后，你将看到日志输出，服务监听在端口 **8001**。
 
-现在，两个 MCP 服务都已成功运行，你可以通过 MCP 客户端来调用它们提供的工具了。
+**终端 3: 启动 Python 绘图服务**
+```bash
+python python_plot_service.py
+```
+> ✅ 服务成功启动后，你将看到日志输出，服务监听在端口 **8004**。
+
+现在，所有 MCP 服务都已成功运行，你可以通过 MCP 客户端来调用它们提供的工具了。
